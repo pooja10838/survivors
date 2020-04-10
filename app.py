@@ -1,8 +1,11 @@
 from vega_datasets import data
+import matplotlib.pyplot as plt
 import streamlit as st
 import altair as alt
 import pandas as pd
 from PIL import Image
+import seaborn as sns
+
 def main():
     df = load_data()
     ep_data = load_ep_data()
@@ -24,8 +27,16 @@ def main():
         st.header("Epidemiological Data")
         st.write( ep_data.drop(['userId'], axis=1))
         st.header("Epidemiological Charts")
+        st.subheader("Bar Plots")
         x_axis = st.selectbox("Choose a variable for the x-axis", ep_data.columns, index=3)
         visualize_descriptive(ep_data, x_axis)
+
+        sns.set(font_scale=1.4)
+        ep_data['gender'].value_counts().plot(kind='bar', figsize=(7, 6), rot=0)
+        plt.xlabel("Gender", labelpad=14)
+        plt.ylabel("Count of People", labelpad=14)
+        plt.title("Count of People Who Received Tips by Gender", y=1.02)
+        st.pyplot()
 
     elif page == "Exploration":
         st.title("Data Exploration")

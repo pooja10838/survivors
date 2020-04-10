@@ -14,9 +14,11 @@ def main():
         st.header("Covid-19 Recovered Data")
         st.write("Please select a page on the left.")
         st.write(df)
+
     elif page == "Sociodemographic":
         st.title("Epidemiological")
-        st.write(epdf)
+        st.write(ep_data)
+
     elif page == "Exploration":
         st.title("Data Exploration")
         st.image(image, width =100)

@@ -40,7 +40,9 @@ def main():
         else :
             ep_data['ageRange'] = 'Unknown'
          
-        
+        ageSumm = pd.pivot_table(ep_data,index=["ageRange"],values=["userId"],aggfunc={'userId':np.sum})
+        st.table(ageSumm)
+
             
         ep_data['age'].value_counts().plot(kind='bar', figsize=(7, 6), rot=0)
         plt.xlabel("Gender", labelpad=14)

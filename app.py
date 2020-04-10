@@ -1,16 +1,22 @@
 from vega_datasets import data
 import streamlit as st
 import altair as alt
+import pandas as pd
 from PIL import Image
 def main():
     df = load_data()
-    page = st.sidebar.selectbox("Choose a page", ["Homepage", "Exploration"])
+    ep_data = load_ep_data()
+
+    page = st.sidebar.selectbox("Choose a page", ["Homepage", "Sociodemographic", "Exploration"])
     image = Image.open("images/image.png")
 
     if page == "Homepage":
         st.header("Covid-19 Recovered Data")
         st.write("Please select a page on the left.")
         st.write(df)
+    elif page == "Sociodemographic":
+        st.title("Epidemiological")
+        st.write(epdf)
     elif page == "Exploration":
         st.title("Data Exploration")
         st.image(image, width =100)
@@ -22,6 +28,9 @@ def main():
 def load_data():
     df = data.cars()
     return df
+def load_ep_data():
+    ep_data = pd.read_csv("data/epidemiological.csv")
+    return ep_data
 
 def visualize_data(df, x_axis, y_axis):
     graph = alt.Chart(df).mark_circle(size=60).encode(

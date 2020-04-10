@@ -8,20 +8,28 @@ def main():
     ep_data = load_ep_data()
 
     page = st.sidebar.selectbox("Choose a page", ["Homepage", "Sociodemographic", "Exploration"])
-    image = Image.open("images/image.png")
+    team_image = Image.open("images/image.png")
+    corona_image = Image.open("images/corona.png")
 
     if page == "Homepage":
-        st.header("Covid-19 Recovered Data")
-        st.write("Please select a page on the left.")
-        st.write(df)
+        st.header("Covid-19 Hackathon Greece")
+        st.subheader("Team: Survivors")
+        st.image(team_image, width=100)
+        st.write("As we can see from the current facts, recovery from Covid-19 depends on several factors ( supportive care , patient’s response e.t.c ) and of course investigational treatments are currently increasing. \n \
+                  \nThose who do or will recover probably will develop antibodies. It is not known yet if people who recover are immune for life or if they can later become infected with a different species of Covid virus. Some survivors may have long-term complications . \n \
+                  \nThe idea was to create a simple app where those who were recovered will fill periodically a survey, tracking down several possible health issues \n \
+                  \n Here you ll find the on-going results and the analysis of these data \n ")
 
     elif page == "Sociodemographic":
-        st.title("Epidemiological")
-        st.write(ep_data)
+        st.header("Epidemiological Data")
+        st.write( ep_data.drop(['userId'], axis=1))
+        st.header("Epidemiological Charts")
+        x_axis = st.selectbox("Choose a variable for the x-axis", ep_data.columns, index=3)
+        visualize_descriptive(ep_data, x_axis)
 
     elif page == "Exploration":
         st.title("Data Exploration")
-        st.image(image, width =100)
+        st.image(corona_image, width =100)
         x_axis = st.selectbox("Choose a variable for the x-axis", df.columns, index=3)
         y_axis = st.selectbox("Choose a variable for the y-axis", df.columns, index=4)
         visualize_data(df, x_axis, y_axis)
@@ -34,6 +42,14 @@ def load_ep_data():
     ep_data = pd.read_csv("data/epidemiological.csv")
     return ep_data
 
+def visualize_descriptive(df, x_axis):
+    graph = alt.Chart(df).mark_bar().encode(
+        x=x_axis,
+        y='count()',
+        color=x_axis,
+    ).interactive()
+    st.write(graph)
+
 def visualize_data(df, x_axis, y_axis):
     graph = alt.Chart(df).mark_circle(size=60).encode(
         x=x_axis,
@@ -41,7 +57,6 @@ def visualize_data(df, x_axis, y_axis):
         color='Origin',
         tooltip=['Name', 'Origin', 'Horsepower', 'Miles_per_Gallon']
     ).interactive()
-
     st.write(graph)
 
 if __name__ == "__main__":
